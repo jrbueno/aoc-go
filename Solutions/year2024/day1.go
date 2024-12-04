@@ -1,0 +1,78 @@
+package day1
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"math"
+	"os"
+	"slices"
+	"strconv"
+	"strings"
+)
+
+func RunPartOne(input *os.File, year int, day int) any {
+	fmt.Printf("Running Part One solution for year %d day %d\n", year, day)
+	left, right := parseInput(input)
+	//sort the arrays
+	slices.Sort(left)
+	slices.Sort(right)
+
+	//verify the arrays are the same length
+	if len(left) != len(right) {
+		log.Fatalf("Error parsing the file - left and right arrays are not the same length")
+	}
+
+	//print the arrays
+	//fmt.Printf("Left Side: %v\n", left)
+	//fmt.Printf("Right Side: %v\n", right)
+
+	//calculate the total distance
+	var totalDistance int
+	for i := 0; i < len(left); i++ {
+		distance := int(math.Abs(float64(left[i] - right[i])))
+		//fmt.Println(distance)
+		totalDistance += distance
+	}
+	//fmt.Printf("Total Distance: %v\n", totalDistance)
+	return totalDistance
+}
+
+func RunPartTwo(input *os.File, year int, day int) any {
+	fmt.Printf("Running Part Two solution for year %d day %d\n", year, day)
+	return 0
+}
+
+func RunDayOneAll(input *os.File, year int, day int) (any, any) {
+	fmt.Printf("Running All solution for year %d day %d\n", year, day)
+	partOneResult := RunPartOne(input, year, day)
+	partTwoResult := RunPartTwo(input, year, day)
+	return partOneResult, partTwoResult
+}
+
+func parseInput(file *os.File) ([]int, []int) {
+	var left, right []int
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		words := strings.Fields(line)
+		if len(words) != 2 {
+			log.Fatalf("Error parsing the file - invalid line: %v", line)
+		}
+		if n, err := strconv.Atoi(words[0]); err == nil {
+			left = append(left, n)
+		} else {
+			log.Fatalf("Error parsing the file: %v", err)
+		}
+		if n, err := strconv.Atoi(words[1]); err == nil {
+			right = append(right, n)
+		} else {
+			log.Fatalf("Error parsing the file: %v", err)
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		// handle error
+		log.Fatalf("Error parsing the file: %v", err)
+	}
+	return left, right
+}
