@@ -36,3 +36,5 @@ terraform/cloud-builders-community
 .go-cache/
 tmp/
 .env
+inputs/
+bin/

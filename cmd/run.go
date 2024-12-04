@@ -6,8 +6,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	day1 "jrbueno/aoc-go/Solutions/year2024"
 	"jrbueno/aoc-go/internal"
+	day1 "jrbueno/aoc-go/solutions/year2024"
 	"log"
 	"os"
 )
