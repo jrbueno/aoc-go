@@ -57,13 +57,16 @@ func RunPartTwo(input []string, year int, day int) any {
 		log.Fatalf("Error parsing the file - left and right arrays are not the same length")
 	}
 
+	//iterate through the right array and count the number of times each number appears
+	numCounts := make(map[int]int)
+	for _, num := range right {
+		numCounts[num]++
+	}
 	//calculate the similarity score
 	var similarityScore int
 	for _, num := range left {
-		for _, rightNum := range right {
-			if num == rightNum {
-				similarityScore += rightNum
-			}
+		if numCounts[num] > 0 {
+			similarityScore += num * numCounts[num]
 		}
 	}
 	return similarityScore

@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"jrbueno/aoc-go/internal"
-	day1 "jrbueno/aoc-go/solutions/year2024"
+	"jrbueno/aoc-go/solutions/year2024/day1"
 	"log"
 	"os"
 )
