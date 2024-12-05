@@ -11,7 +11,7 @@ import (
 )
 
 func RunPartOne(input []string, year int, day int) any {
-	fmt.Printf("Running Part One solution for year %d day %d\n", year, day)
+	//fmt.Printf("Running Part One solution for year %d day %d\n", year, day)
 	left, right := parseInput(input)
 	if left == nil || right == nil {
 		log.Printf("Error parsing the file - left or right arrays are nil")
@@ -42,8 +42,31 @@ func RunPartOne(input []string, year int, day int) any {
 }
 
 func RunPartTwo(input []string, year int, day int) any {
-	fmt.Printf("Running Part Two solution for year %d day %d\n", year, day)
-	return 0
+	//fmt.Printf("Running Part Two solution for year %d day %d\n", year, day)
+	left, right := parseInput(input)
+	if left == nil || right == nil {
+		log.Printf("Error parsing the file - left or right arrays are nil")
+		return 0
+	}
+	//sort the arrays
+	slices.Sort(left)
+	slices.Sort(right)
+
+	//verify the arrays are the same length
+	if len(left) != len(right) {
+		log.Fatalf("Error parsing the file - left and right arrays are not the same length")
+	}
+
+	//calculate the similarity score
+	var similarityScore int
+	for _, num := range left {
+		for _, rightNum := range right {
+			if num == rightNum {
+				similarityScore += rightNum
+			}
+		}
+	}
+	return similarityScore
 }
 
 func RunAll(year int, day int, partOneInput []string, partTwoInput []string) (any, any) {
