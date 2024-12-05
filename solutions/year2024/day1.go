@@ -5,15 +5,18 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"os"
 	"slices"
 	"strconv"
 	"strings"
 )
 
-func RunPartOne(input *os.File, year int, day int) any {
+func RunPartOne(input []string, year int, day int) any {
 	fmt.Printf("Running Part One solution for year %d day %d\n", year, day)
 	left, right := parseInput(input)
+	if left == nil || right == nil {
+		log.Printf("Error parsing the file - left or right arrays are nil")
+		return 0
+	}
 	//sort the arrays
 	slices.Sort(left)
 	slices.Sort(right)
@@ -38,21 +41,26 @@ func RunPartOne(input *os.File, year int, day int) any {
 	return totalDistance
 }
 
-func RunPartTwo(input *os.File, year int, day int) any {
+func RunPartTwo(input []string, year int, day int) any {
 	fmt.Printf("Running Part Two solution for year %d day %d\n", year, day)
 	return 0
 }
 
-func RunDayOneAll(input *os.File, year int, day int) (any, any) {
+func RunAll(year int, day int, partOneInput []string, partTwoInput []string) (any, any) {
 	fmt.Printf("Running All solution for year %d day %d\n", year, day)
-	partOneResult := RunPartOne(input, year, day)
-	partTwoResult := RunPartTwo(input, year, day)
+	partOneResult := RunPartOne(partOneInput, year, day)
+	partTwoResult := RunPartTwo(partTwoInput, year, day)
 	return partOneResult, partTwoResult
 }
 
-func parseInput(file *os.File) ([]int, []int) {
+func parseInput(lines []string) ([]int, []int) {
+	//check if the file is nil
+	if len(lines) == 0 {
+		log.Printf("No Data to Parse")
+		return nil, nil
+	}
 	var left, right []int
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(strings.NewReader(strings.Join(lines, "\n")))
 	for scanner.Scan() {
 		line := scanner.Text()
 		words := strings.Fields(line)

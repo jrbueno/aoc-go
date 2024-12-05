@@ -4,6 +4,8 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"bufio"
+	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
 	"jrbueno/aoc-go/internal"
@@ -29,27 +31,41 @@ var runCmd = &cobra.Command{
 		var ds *internal.DaySolution
 		switch day {
 		case 1:
-			ds = internal.NewDaySolution(year, day, day1.RunDayOneAll, day1.RunPartOne, day1.RunPartTwo)
+			ds = internal.NewDaySolution(year, day, day1.RunAll, day1.RunPartOne, day1.RunPartTwo)
 		default:
 			fmt.Printf("No solution found for year %v day %v\n", year, day)
 			return
 		}
-		inputFile := getInputFile(year, day)
-		defer inputFile.Close()
-		partOneResult, partTwoResult := ds.RunAll(inputFile, year, day)
+		partOneInput := getInputFile(year, day, 1)
+		partTwoInput := getInputFile(year, day, 1)
+		partOneResult, partTwoResult := ds.RunAll(year, day, partOneInput, partTwoInput)
 		fmt.Printf("Part Two Result: %v\n", partTwoResult)
 		fmt.Printf("Part One Result: %v\n", partOneResult)
 	},
 }
 
-func getInputFile(year int, day int) *os.File {
-	fileName := fmt.Sprintf("inputs/%d/day%d.txt", year, day)
+func getInputFile(year int, day int, part int) []string {
+	fileName := fmt.Sprintf("inputs/%d/day%d-%d.txt", year, day, part)
+	if _, err := os.Stat(fileName); errors.Is(err, os.ErrNotExist) {
+		log.Printf("Input file %s does not exist", fileName)
+		return nil
+	}
 	file, err := os.Open(fileName)
 	if err != nil {
 		log.Fatalf("Error opening file %s: %v", fileName, err)
 		panic(err)
 	}
-	return file
+	defer file.Close()
+
+	var lines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	if err := scanner.Err(); err != nil {
+		log.Fatalf("Error reading file %s: %v", fileName, err)
+	}
+	return lines
 }
 
 func init() {
