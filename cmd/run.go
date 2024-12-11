@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"jrbueno/aoc-go/internal"
 	"jrbueno/aoc-go/solutions/year2024/day1"
+	"jrbueno/aoc-go/solutions/year2024/day2"
 	"log"
 	"os"
 )
@@ -32,12 +33,14 @@ var runCmd = &cobra.Command{
 		switch day {
 		case 1:
 			ds = internal.NewDaySolution(year, day, day1.RunAll, day1.RunPartOne, day1.RunPartTwo)
+		case 2:
+			ds = internal.NewDaySolution(year, day, day2.RunAll, day2.RunPartOne, day2.RunPartTwo)
 		default:
 			fmt.Printf("No solution found for year %v day %v\n", year, day)
 			return
 		}
 		partOneInput := getInputFile(year, day, 1)
-		partTwoInput := getInputFile(year, day, 1)
+		partTwoInput := getInputFile(year, day, 2)
 		partOneResult, partTwoResult := ds.RunAll(year, day, partOneInput, partTwoInput)
 		fmt.Printf("Part Two Result: %v\n", partTwoResult)
 		fmt.Printf("Part One Result: %v\n", partOneResult)
