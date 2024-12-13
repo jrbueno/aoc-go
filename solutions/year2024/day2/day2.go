@@ -61,7 +61,6 @@ func RunPartTwo(input []string, year int, day int) any {
 		var r []int
 		reports := strings.Fields(l)
 		var isSafe bool
-		direction := 0
 		for _, num := range reports {
 			n, err := strconv.Atoi(num)
 			if err != nil {
@@ -70,26 +69,20 @@ func RunPartTwo(input []string, year int, day int) any {
 			r = append(r, n)
 		}
 
-		fmt.Printf("Processing Row: %v\n", r)
-		for i := 0; i < len(r); i++ {
-			if i == 0 {
-				continue
-			}
+		//fmt.Printf("Processing Row: %v\n", r)
+		isSafe = compareLevel(r)
+		if !isSafe {
+			fmt.Printf("UnSafe Row: %v\n", r)
 
-			isSafe = compareLevel(direction, r, i)
-			if !isSafe && i < len(r)-1 {
-				fmt.Printf("UnSafe Row: %v index:%v\n", r, i)
+			for i := 0; i < len(r); i++ {
 				blah := slices.Delete(slices.Clone(r), i, i+1)
 				fmt.Printf("Blah Row: %v\n", blah)
-				isSafe = compareLevel(direction, blah, i)
+				isSafe = compareLevel(blah)
 				fmt.Printf("Blah Row Safe: %v\n", isSafe)
+				if isSafe {
+					break
+				}
 			}
-
-			if !isSafe {
-				break
-			}
-
-			direction = r[i-1] - r[i]
 		}
 		if isSafe {
 			fmt.Printf("Row: %v Safe:%v\n", r, isSafe)
@@ -101,16 +94,25 @@ func RunPartTwo(input []string, year int, day int) any {
 	return safeCount
 }
 
-func compareLevel(direction int, r []int, i int) bool {
-	if direction > 0 && r[i-1] < r[i] {
-		return false
+func compareLevel(r []int) bool {
+
+	isSafe := true
+	direction := 0
+	for i := 1; i < len(r); i++ {
+		if direction > 0 && r[i-1] < r[i] {
+			isSafe = false
+			break
+		}
+		if direction < 0 && r[i-1] > r[i] {
+			isSafe = false
+			break
+		}
+		d := int(math.Abs(float64(r[i-1] - r[i])))
+		if d == 0 || d > 3 {
+			isSafe = false
+			break
+		}
+		direction = r[i-1] - r[i]
 	}
-	if direction < 0 && r[i-1] > r[i] {
-		return false
-	}
-	d := int(math.Abs(float64(r[i-1] - r[i])))
-	if d == 0 || d > 3 {
-		return false
-	}
-	return true
+	return isSafe
 }
