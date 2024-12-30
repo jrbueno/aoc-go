@@ -12,6 +12,7 @@ import (
 	"jrbueno/aoc-go/solutions/year2024/day1"
 	"jrbueno/aoc-go/solutions/year2024/day2"
 	"jrbueno/aoc-go/solutions/year2024/day3"
+	"jrbueno/aoc-go/solutions/year2024/day4"
 	"log"
 	"os"
 )
@@ -38,6 +39,8 @@ var runCmd = &cobra.Command{
 			ds = internal.NewDaySolution(year, day, day2.RunAll, day2.RunPartOne, day2.RunPartTwo)
 		case 3:
 			ds = internal.NewDaySolution(year, day, day3.RunAll, day3.RunPartOne, day3.RunPartTwo)
+		case 4:
+			ds = internal.NewDaySolution(year, day, day4.RunAll, day4.RunPartOne, day4.RunPartTwo)
 		default:
 			fmt.Printf("No solution found for year %v day %v\n", year, day)
 			return
